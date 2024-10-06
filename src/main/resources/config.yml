@@ -1,0 +1,3 @@
+enable: true
+delay: 5
+text: "§6%dir§r | §6X:§r %x §6Y:§r %y §6Z:§r %z" 

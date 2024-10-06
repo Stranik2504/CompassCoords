@@ -1,0 +1,14 @@
+name: CompassCoords
+version: '1.0'
+main: stranik.dev.compassCoords.CompassCoords
+api-version: '1.21'
+
+commands:
+  compassCoords:
+    permission: compassCoords.commands
+    aliases: [ "coords" ]
+
+permissions:
+  compassCoords.commands:
+    default: op
+    description: Permission to use commands
