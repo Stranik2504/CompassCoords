@@ -1,5 +1,6 @@
 package stranik.dev.compassCoords;
 
+import com.comphenix.protocol.PacketType;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -7,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.DecimalFormat;
+
+import static stranik.dev.compassCoords.CompassCoords.*;
 
 public class Runner {
     public Runner() {
@@ -18,20 +21,27 @@ public class Runner {
                     p.getInventory().getItemInMainHand().equals(ItemStack.of(Material.COMPASS)) ||
                     p.getInventory().getItemInOffHand().equals(ItemStack.of(Material.COMPASS))
             ) {
+                setReducedDebugInfo(p, false);
+
                 var text = CompassCoords.getInstance().getConfig().getString("text");
 
-                DecimalFormat df = new DecimalFormat("#.00");
+                DecimalFormat df = new DecimalFormat("0.00");
 
                 text = text
-                        .replace("%x", df.format(p.getX()))
-                        .replace("%y", df.format(p.getY()))
-                        .replace("%z", df.format(p.getZ()))
+                        .replace("%dx", df.format(p.getX()))
+                        .replace("%dy", df.format(p.getY()))
+                        .replace("%dz", df.format(p.getZ()))
+                        .replace("%x", String.valueOf((int)p.getX()))
+                        .replace("%y", String.valueOf((int)p.getY()))
+                        .replace("%z", String.valueOf((int)p.getZ()))
                         .replace("%dir", getCardinalDirection(p))
                 
                 ;
 
                 p.sendActionBar(Component.text(text));;
             }
+            else
+                setReducedDebugInfo(p, true);
         }
     }
 
@@ -63,5 +73,15 @@ public class Runner {
         }
 
         return "";
+    }
+    
+    private static void setReducedDebugInfo(Player player, boolean value) {
+        var packet = getProtocolManager().createPacket(PacketType.Play.Server.ENTITY_STATUS);
+
+
+        packet.getIntegers().write(0, player.getEntityId());
+        packet.getBytes().write(0, value ? (byte) 22 : (byte) 23);
+
+        getProtocolManager().sendServerPacket(player, packet);
     }
 }

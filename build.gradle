@@ -1,0 +1,67 @@
+buildscript {
+    repositories {
+        flatDir {
+            dirs '.'
+        }
+    }
+    dependencies {
+        classpath 'com.rikonardo.papermake:papermake:1.0.6'
+    }
+}
+
+plugins {
+    id 'java'
+    
+    //id 'com.rikonardo.papermake' version '1.0.6'
+}
+
+apply plugin: 'com.rikonardo.papermake'
+group = 'stranik.dev'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "papermc-repo"
+        url = "https://repo.papermc.io/repository/maven-public/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+    repositories {
+        maven { url "https://repo.dmulloy2.net/repository/public/" }
+    }
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.3.0'
+}
+
+def targetJavaVersion = 21
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}

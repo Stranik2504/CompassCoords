@@ -1,5 +1,14 @@
 package stranik.dev.compassCoords;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,6 +23,7 @@ public final class CompassCoords extends JavaPlugin {
     private BukkitTask _task;
     
     public static CompassCoords getInstance() { return getPlugin(CompassCoords.class); }
+    public static ProtocolManager getProtocolManager() { return ProtocolLibrary.getProtocolManager(); }
 
     @Override
     public void onEnable() {
