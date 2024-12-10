@@ -8,20 +8,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import static stranik.dev.compassCoords.CompassCoords.*;
 
 public class Runner {
+    private static final ArrayList<Player> _players = new ArrayList<>();
+    
     public Runner() {
     }
 
     public static void run() {
-        for (var p : Bukkit.getOnlinePlayers()) {
+        var online = Bukkit.getOnlinePlayers();
+        _players.removeIf(p -> !online.contains(p));
+        
+        for (var p : online) {
             if (
                     p.getInventory().getItemInMainHand().equals(ItemStack.of(Material.COMPASS)) ||
                     p.getInventory().getItemInOffHand().equals(ItemStack.of(Material.COMPASS))
             ) {
-                setReducedDebugInfo(p, false);
+                if (!_players.contains(p)) {
+                    setReducedDebugInfo(p, false);
+
+                    _players.add(p);
+                }
 
                 var text = CompassCoords.getInstance().getConfig().getString("text");
 
@@ -40,8 +50,14 @@ public class Runner {
 
                 p.sendActionBar(Component.text(text));;
             }
-            else
+            else if (_players.contains(p)) {
                 setReducedDebugInfo(p, true);
+                
+                // clear action bar
+                p.sendActionBar(Component.text(""));
+
+                _players.remove(p);
+            }
         }
     }
 
