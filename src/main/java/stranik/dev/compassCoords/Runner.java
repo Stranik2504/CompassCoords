@@ -24,8 +24,8 @@ public class Runner {
         
         for (var p : online) {
             if (
-                    p.getInventory().getItemInMainHand().equals(ItemStack.of(Material.COMPASS)) ||
-                    p.getInventory().getItemInOffHand().equals(ItemStack.of(Material.COMPASS))
+                    p.getInventory().getItemInMainHand().getType().equals(Material.COMPASS) ||
+                    p.getInventory().getItemInOffHand().getType().equals(Material.COMPASS)
             ) {
                 if (!_players.contains(p)) {
                     setReducedDebugInfo(p, false);
