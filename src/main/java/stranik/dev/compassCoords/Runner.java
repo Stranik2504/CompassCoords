@@ -69,23 +69,23 @@ public class Runner {
         }
         
         if (0 <= rotation && rotation < 22.5) {
-            return "N";
+            return getTextDir("west");
         } else if (22.5 <= rotation && rotation < 67.5) {
-            return "NE";
+            return getTextDir("northwest");
         } else if (67.5 <= rotation && rotation < 112.5) {
-            return "E";
+            return getTextDir("north");
         } else if (112.5 <= rotation && rotation < 157.5) {
-            return "SE";
+            return getTextDir("northeast");
         } else if (157.5 <= rotation && rotation < 202.5) {
-            return "S";
+            return getTextDir("east");
         } else if (202.5 <= rotation && rotation < 247.5) {
-            return "SW";
+            return getTextDir("southeast");
         } else if (247.5 <= rotation && rotation < 292.5) {
-            return "W";
+            return getTextDir("south");
         } else if (292.5 <= rotation && rotation < 337.5) {
-            return "NW";
+            return getTextDir("southwest");
         } else if (337.5 <= rotation && rotation < 360.0) {
-            return "N";
+            return getTextDir("west");
         }
 
         return "";
@@ -99,5 +99,9 @@ public class Runner {
         packet.getBytes().write(0, value ? (byte) 22 : (byte) 23);
 
         getProtocolManager().sendServerPacket(player, packet);
+    }
+    
+    private static String getTextDir(String field) {
+        return CompassCoords.getInstance().getConfig().getString("directions." + field);
     }
 }
