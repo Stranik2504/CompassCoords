@@ -45,6 +45,11 @@ public class Runner {
                         .replace("%y", String.valueOf((int)p.getY()))
                         .replace("%z", String.valueOf((int)p.getZ()))
                         .replace("%dir", getCardinalDirection(p))
+                        .replace("%world", p.getWorld().getName())
+                        .replace("%dyaw", df.format(p.getLocation().getYaw()))
+                        .replace("%dpitch", df.format(p.getLocation().getPitch()))
+                        .replace("%yaw", p.getLocation().getYaw())
+                        .replace("%pitch", p.getLocation().getPitch())
                 
                 ;
 
