@@ -2,6 +2,8 @@ package stranik.dev.compassCoords;
 
 import com.comphenix.protocol.PacketType;
 import net.kyori.adventure.text.Component;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,30 +38,30 @@ public class Runner {
                 var text = CompassCoords.getInstance().getConfig().getString("text");
 
                 DecimalFormat df = new DecimalFormat("0.00");
+                var loc = p.getLocation();
 
                 text = text
-                        .replace("%dx", df.format(p.getX()))
-                        .replace("%dy", df.format(p.getY()))
-                        .replace("%dz", df.format(p.getZ()))
-                        .replace("%x", String.valueOf((int)p.getX()))
-                        .replace("%y", String.valueOf((int)p.getY()))
-                        .replace("%z", String.valueOf((int)p.getZ()))
+                        .replace("%dx", df.format(loc.getX()))
+                        .replace("%dy", df.format(loc.getY()))
+                        .replace("%dz", df.format(loc.getZ()))
+                        .replace("%x", String.valueOf((int)loc.getX()))
+                        .replace("%y", String.valueOf((int)loc.getY()))
+                        .replace("%z", String.valueOf((int)loc.getZ()))
                         .replace("%dir", getCardinalDirection(p))
                         .replace("%world", p.getWorld().getName())
-                        .replace("%dyaw", df.format(p.getLocation().getYaw()))
-                        .replace("%dpitch", df.format(p.getLocation().getPitch()))
-                        .replace("%yaw", p.getLocation().getYaw())
-                        .replace("%pitch", p.getLocation().getPitch())
-                
+                        .replace("%dyaw", df.format(loc.getYaw()))
+                        .replace("%dpitch", df.format(loc.getPitch()))
+                        .replace("%yaw", String.valueOf(loc.getYaw()))
+                        .replace("%pitch", String.valueOf(loc.getPitch()))
                 ;
 
-                p.sendActionBar(Component.text(text));;
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
             }
             else if (_players.contains(p)) {
                 setReducedDebugInfo(p, true);
                 
                 // clear action bar
-                p.sendActionBar(Component.text(""));
+                p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(""));
 
                 _players.remove(p);
             }
